@@ -5,7 +5,7 @@ const database = require('./dbModels.js');
 const {getSuggestModal, getSuggestEmbed} = require('./helpers/suggestHelpers.js');
 
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.DirectMessages],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates],
     partials: [Partials.Channel, Partials.Message, Partials.Reaction]
 });
 
@@ -40,7 +40,7 @@ client.on(Events.InteractionCreate, async interaction => {
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isModalSubmit()) return;
     if (interaction.customId === 'suggest_event_modal') {
-        await interaction.reply({ content: 'Вы успешно заказали событие', ephemeral: true });
+        await interaction.reply({content: 'Вы успешно заказали событие', ephemeral: true});
         const field = interaction.fields.getTextInputValue('suggestedEventInput')
         const embed = getSuggestEmbed(interaction.user.username, interaction.user.avatarURL(), field)
         const channel = interaction.client.channels.cache.get(process.env.CLIENT_SUGGEST_ROOM_ID);
