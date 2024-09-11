@@ -1,6 +1,7 @@
 const {SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder} = require('discord.js');
 const {Events} = require("../../dbModels.js");
 const {sequelize} = require("../../dbInit.js");
+const {ANNOUNCE_EVENT} = require("../constants/buttonsIds");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,7 +14,7 @@ module.exports = {
 
 
         const announce_event = new ButtonBuilder()
-            .setCustomId('announce_event')
+            .setCustomId(ANNOUNCE_EVENT)
             .setLabel('Анонсировать событие')
             .setStyle(ButtonStyle.Secondary);
 

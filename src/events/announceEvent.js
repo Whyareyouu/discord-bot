@@ -3,11 +3,12 @@ const {EventList} = require("../dbModels.js");
 const {paginate} = require("../helpers/pagination.js");
 const getSubmitButtons = require("../helpers/submitButtons.js");
 const getEmbedForEvent = require("../helpers/eventEmbedBuilder");
+const {ANNOUNCE_EVENT} = require("../commands/constants/buttonsIds");
 module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction) {
         if (!interaction.isButton()) return;
-        if (interaction.customId === 'announce_event') {
+        if (interaction.customId === ANNOUNCE_EVENT) {
             const events = await EventList.findAll({raw: true});
             const announceEvent = async (eventId, interaction) => {
                 const event = await EventList.findOne({where: {id: eventId}, raw:true});

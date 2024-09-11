@@ -1,13 +1,14 @@
 const {SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder} = require('discord.js');
 const {EventList} = require("../../dbModels.js");
+const {CONFIRM_CREATE_EVENT_BUTTON, CANCEL_CREATE_EVENT_BUTTON} = require("../constants/buttonsIds");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('create-event')
-        .setDescription('Provides information about the user.')
+        .setDescription('Создать ивент')
         .addStringOption(option =>
             option.setName('title')
-                .setDescription('Название которое будет отображаться в заголовке ивента')
+                .setDescription('Название ивента для отображения в заголовке')
                 .setRequired(true)
                 .setMaxLength(255))
         .addStringOption(option =>
@@ -16,7 +17,7 @@ module.exports = {
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('banner')
-                .setDescription('ссылка на гифку или картинку, которая будет отображаться в ивенте')
+                .setDescription('Ссылка на изображение или гифку для отображения в ивенте')
                 .setRequired(true)
                 .setMaxLength(255)),
 
@@ -24,18 +25,18 @@ module.exports = {
 
         const options = interaction.options?._hoistedOptions;
 
-        const acceptCreateEvent = new ButtonBuilder()
-            .setCustomId('accept_create_event')
+        const confirmCreateEventButton = new ButtonBuilder()
+            .setCustomId(CONFIRM_CREATE_EVENT_BUTTON)
             .setLabel('✅')
             .setStyle(ButtonStyle.Success);
 
-        const cancelCreateEvent = new ButtonBuilder()
-            .setCustomId('cancel_create_event')
+        const cancelCreateEventButton = new ButtonBuilder()
+            .setCustomId(CANCEL_CREATE_EVENT_BUTTON)
             .setLabel('⛔')
             .setStyle(ButtonStyle.Danger);
 
         const announceEventActionRow = new ActionRowBuilder()
-            .addComponents(acceptCreateEvent, cancelCreateEvent);
+            .addComponents(confirmCreateEventButton, cancelCreateEventButton);
 
         if(!options){
             await interaction.reply({content: "Произошла ошибка при создании ивента", ephemeral: true});
@@ -46,27 +47,27 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setTitle(`🔔  Ивент — ${transformedOptions?.title}`)
                 .setDescription('```' + transformedOptions?.description + '```')
-                .setFields({name: "Игроков", value: "0", inline: true}, {
+                .setFields({name: "Количество игроков", value: "0", inline: true}, {
                     name: "Награда за участие",
                     value: "75 🪙",
                     inline: true
                 })
                 .setImage(transformedOptions.banner);
 
-            const message = await interaction.reply({content: "Пример добавляемого ивента",embeds: [embed], components: [announceEventActionRow], ephemeral: true});
+            const message = await interaction.reply({content: "Пример создаваемого ивента",embeds: [embed], components: [announceEventActionRow], ephemeral: true});
             const filter = i => i.user.id === interaction.user.id;
             try {
                 const confirmation = await message.awaitMessageComponent({filter, time: 60000})
-                if(confirmation.customId === 'accept_create_event'){
+                if(confirmation.customId === CONFIRM_CREATE_EVENT_BUTTON){
                     await EventList.create(transformedOptions);
-                    await confirmation.update({content: "Ивент был создан",embeds: [],components: [], ephemeral: true})
+                    await confirmation.update({content: "Ивент успешно создан!",embeds: [],components: [], ephemeral: true})
                 }
-                else if(confirmation.customId === 'cancel_create_event'){
-                    await confirmation.update({content: "Создание ивента было отменено",embeds: [],components: [], ephemeral: true})
+                else if(confirmation.customId === CANCEL_CREATE_EVENT_BUTTON){
+                    await confirmation.update({content: "Создание ивента было отменено.",embeds: [],components: [], ephemeral: true})
                 }
             }catch (e) {
                 if(e?.name === "SequelizeUniqueConstraintError"){
-                    await interaction.followUp({ content:`Произошла ошибка при обработке вашего запроса. Попробуйте снова.\n\n Ошибка: ${e?.parent?.detail}`, ephemeral: true });
+                    await interaction.followUp({ content:`Ошибка при обработке запроса: ${e.parent?.detail}. Попробуйте снова.`, ephemeral: true });
                     return
                 }
                 await interaction.followUp({ content:`Произошла ошибка при обработке вашего запроса. Попробуйте снова.`, ephemeral: true });
