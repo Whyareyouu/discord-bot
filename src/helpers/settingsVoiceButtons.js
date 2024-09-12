@@ -1,53 +1,56 @@
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder} = require("discord.js");
+const {ADD_USER_SLOT, REMOVE_USER_SLOT, LOCK_ROOM, TOGGLE_MUTE_USER, KICK_USER, ADJUST_BITRATE, SET_ROOM_SLOTS,
+    RENAME_ROOM, TOGGLE_ROOM_VISIBILITY, TOGGLE_USER_ACCESS
+} = require("../commands/constants/buttonsIds");
 
 const settingsVoiceButtons = () => {
     const addUserSlotButton = new ButtonBuilder()
-        .setCustomId('addUserSlot')
+        .setCustomId(ADD_USER_SLOT)
         .setLabel("➕")
         .setStyle(ButtonStyle.Secondary);
 
     const removeUserSlotButton = new ButtonBuilder()
-        .setCustomId('removeUserSlot')
+        .setCustomId(REMOVE_USER_SLOT)
         .setLabel("➖")
         .setStyle(ButtonStyle.Secondary);
 
     const lockRoomButton = new ButtonBuilder()
-        .setCustomId('lockRoom')
+        .setCustomId(LOCK_ROOM)
         .setLabel("🔒")
         .setStyle(ButtonStyle.Secondary);
 
     const toggleMuteUserButton = new ButtonBuilder()
-        .setCustomId('toggleMuteUser')
+        .setCustomId(TOGGLE_MUTE_USER)
         .setLabel("🔊")
         .setStyle(ButtonStyle.Secondary);
 
     const kickUserButton = new ButtonBuilder()
-        .setCustomId('kickUser')
+        .setCustomId(KICK_USER)
         .setLabel("📤")
         .setStyle(ButtonStyle.Secondary);
 
     const adjustBitrateButton = new ButtonBuilder()
-        .setCustomId('adjustBitrate')
+        .setCustomId(ADJUST_BITRATE)
         .setLabel("⚙️")
         .setStyle(ButtonStyle.Secondary);
 
     const setRoomSlotsButton = new ButtonBuilder()
-        .setCustomId('setRoomSlots')
+        .setCustomId(SET_ROOM_SLOTS)
         .setLabel("🚹")
         .setStyle(ButtonStyle.Secondary);
 
     const renameRoomButton = new ButtonBuilder()
-        .setCustomId('renameRoom')
+        .setCustomId(RENAME_ROOM)
         .setLabel("✏️")
         .setStyle(ButtonStyle.Secondary);
 
     const toggleRoomVisibilityButton = new ButtonBuilder()
-        .setCustomId('toggleRoomVisibility')
+        .setCustomId(TOGGLE_ROOM_VISIBILITY)
         .setLabel("🔐️")
         .setStyle(ButtonStyle.Secondary);
 
     const toggleUserAccessButton = new ButtonBuilder()
-        .setCustomId('toggleUserAccess')
+        .setCustomId(TOGGLE_USER_ACCESS)
         .setLabel("🔑")
         .setStyle(ButtonStyle.Secondary);
 
