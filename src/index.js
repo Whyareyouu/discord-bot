@@ -1,12 +1,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const {Client, Collection, Events, GatewayIntentBits, Partials} = require('discord.js');
-const database = require('./dbModels.js');
 const {getSuggestModal, getSuggestEmbed} = require('./helpers/suggestHelpers.js');
 
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates],
-    partials: [Partials.Channel, Partials.Message, Partials.Reaction]
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMembers],
+    partials: [Partials.Channel, Partials.Message, Partials.Reaction, Partials.GuildMember]
 });
 
 
