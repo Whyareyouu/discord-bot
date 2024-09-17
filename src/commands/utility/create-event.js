@@ -60,7 +60,7 @@ module.exports = {
                 const confirmation = await message.awaitMessageComponent({filter, time: 60000})
                 if(confirmation.customId === CONFIRM_CREATE_EVENT_BUTTON){
                     await EventList.create(transformedOptions);
-                    await confirmation.update({content: "Ивент успешно создан!",embeds: [],components: [], ephemeral: true})
+                    await confirmation.reply({content: "Ивент успешно создан!",embeds: [embed],components: [], ephemeral: false})
                 }
                 else if(confirmation.customId === CANCEL_CREATE_EVENT_BUTTON){
                     await confirmation.update({content: "Создание ивента было отменено.",embeds: [],components: [], ephemeral: true})
