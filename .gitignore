@@ -155,6 +155,7 @@ Temporary Items
 
 # Local
 .env
+.env.develop
 dist
 
 # Logs

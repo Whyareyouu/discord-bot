@@ -243,7 +243,7 @@ module.exports = {
             const targetUserId = interaction.values[0];
             const targetMember = await interaction.guild.members.fetch(targetUserId);
             const action = interaction.customId.replace("user_select_", "")
-            
+
             switch (action) {
                 case KICK_USER:
                     await targetMember.voice.disconnect('Вас исключили из комнаты.');
