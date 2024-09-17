@@ -2,6 +2,11 @@ const { ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder } = require('
 
 
 async function paginate(interaction, elements, timeout = 60_000, callback) {
+    if(!elements.length){
+        interaction.reply({content:"Нет доступных событий",ephemeral: true});
+        return;
+    }
+
     const elementsPerPage = 5
     const totalPages = Math.ceil(elements.length / elementsPerPage);
     let currentPage = 0;
@@ -96,7 +101,7 @@ async function paginate(interaction, elements, timeout = 60_000, callback) {
             console.error('Ошибка при обработке кнопки:', error);
         }
     });
-
+    // TODO: Stop collector when message close
     collector.on('end', async (confirmation) => {
         // const disabledRow = new ActionRowBuilder().addComponents(
         //     prevPageButton.setDisabled(true),
