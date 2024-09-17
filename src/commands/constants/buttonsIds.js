@@ -13,6 +13,7 @@ const RENAME_ROOM = 'renameRoom';
 const TOGGLE_ROOM_VISIBILITY = 'toggleRoomVisibility';
 const TOGGLE_USER_ACCESS = 'toggleUserAccess';
 
+const SEARCH_BUTTON = "search_button"
 
 module.exports = {
     ANNOUNCE_EVENT,
@@ -27,5 +28,6 @@ module.exports = {
     SET_ROOM_SLOTS,
     RENAME_ROOM,
     TOGGLE_ROOM_VISIBILITY,
-    TOGGLE_USER_ACCESS
+    TOGGLE_USER_ACCESS,
+    SEARCH_BUTTON
 }
