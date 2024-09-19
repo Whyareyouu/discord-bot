@@ -1,12 +1,20 @@
 const {SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder} = require('discord.js');
 const {Events} = require("../../dbModels.js");
 const {sequelize} = require("../../dbInit.js");
+const checkPermission = require("../../helpers/checkPermission");
+const {EVENT_ROLE_IDS} = require("../constants/roleIds");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('event')
         .setDescription('Provides information about the user.'),
     async execute(interaction) {
+        if (!checkPermission(interaction, EVENT_ROLE_IDS)) {
+            await interaction.reply({
+                content: 'У вас нет прав для использования этой команды.', ephemeral: true
+            });
+            return;
+        }
         const embed = new EmbedBuilder()
             .setTitle("🔔  Ивент — Goose goose duck!")
             .setDescription('```Goose Goose Duck — социальная игра, основанная на применении дедукции, в которой группа игроков в образе гусей работает сообща, пытаясь выполнить все цели миссии. Задача осложняется тем, что в команде есть предатели — утки и прочие птицы, каждая из которых отыгрывает свою роль```')

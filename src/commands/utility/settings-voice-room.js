@@ -1,11 +1,19 @@
 const {SlashCommandBuilder, EmbedBuilder} = require('discord.js');
 const settingsVoiceButtons = require("../../helpers/settingsVoiceButtons");
+const checkPermission = require("../../helpers/checkPermission");
+const {ADMIN_ROLE_IDS} = require("../constants/roleIds");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('settings-voice-room')
         .setDescription('Provides information about the user.'),
     async execute(interaction) {
+        if (!checkPermission(interaction, ADMIN_ROLE_IDS)) {
+            await interaction.reply({
+                content: 'У вас нет прав для использования этой команды.', ephemeral: true
+            });
+            return;
+        }
         const embed = new EmbedBuilder()
             .setTitle('Управление приватной комнатой')
             .setDescription('Нажимайте на кнопки ниже, чтобы настроить свою комнату. Вы можете использовать управление только при наличии приватного канала.')
