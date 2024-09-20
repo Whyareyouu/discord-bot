@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         unique: false,
         allowNull: false,
       },
+      messageId: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
     },
     {
       timestamps: true,
