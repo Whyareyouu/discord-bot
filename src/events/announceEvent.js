@@ -1,5 +1,12 @@
-const { Events, EmbedBuilder } = require("discord.js");
-const { EventList } = require("../dbModels.js");
+const {
+  Events,
+  EmbedBuilder,
+  TextInputBuilder,
+  ModalBuilder,
+  TextInputStyle,
+  ActionRowBuilder,
+} = require("discord.js");
+const { EventList, Event } = require("../dbModels.js");
 const { paginate } = require("../helpers/pagination.js");
 const getSubmitButtons = require("../helpers/submitButtons.js");
 const getEmbedForEvent = require("../helpers/eventEmbedBuilder");
@@ -38,25 +45,59 @@ module.exports = {
         try {
           const confirmation = await message.awaitMessageComponent({
             filter,
-            time: 60_000,
+            time: 120_000,
           });
-          console.log(confirmation.customId);
           if (confirmation.customId === "submit_announce_event") {
-            const channel = confirmation.client.channels.cache.get(
-              process.env.CLIENT_EVENT_ROOM_ID,
-            );
-            const eventEmbed = getEmbedForEvent({
-              ...event,
-              username: interaction.user.username,
-              iconURL: interaction.user.avatarURL(),
+            const modal = new ModalBuilder()
+              .setCustomId("event_time_modal")
+              .setTitle("Введите время начала ивента");
+
+            const timeInput = new TextInputBuilder()
+              .setCustomId("event_time_input")
+              .setLabel("Время начала ивента (например, 18:00)")
+              .setStyle(TextInputStyle.Short)
+              .setRequired(true);
+
+            const actionRow = new ActionRowBuilder().addComponents(timeInput);
+
+            modal.addComponents(actionRow);
+
+            await confirmation.showModal(modal);
+
+            const submitted = await confirmation.awaitModalSubmit({
+              time: 60000,
+              filter: (i) => i.user.id === interaction.user.id,
             });
-            await channel.send({ embeds: [eventEmbed] });
-            await confirmation.update({
-              content: "Вы успешно анонсировали ивент",
-              embeds: [],
-              components: [],
-              ephemeral: true,
-            });
+
+            if (submitted) {
+              const startTime =
+                submitted.fields.getTextInputValue("event_time_input");
+              const channel = confirmation.client.channels.cache.get(
+                process.env.CLIENT_EVENT_ROOM_ID,
+              );
+              const eventEmbed = getEmbedForEvent({
+                ...event,
+                startTime,
+                username: interaction.user.username,
+                iconURL: interaction.user.avatarURL(),
+              });
+
+              const eventMessage = await channel.send(eventEmbed);
+
+              await Event.create({
+                name: event.title,
+                players: [],
+                playerBonus: 75,
+                messageId: eventMessage.id,
+              });
+
+              await submitted.reply({
+                content: "Вы успешно анонсировали ивент",
+                embeds: [],
+                components: [],
+                ephemeral: true,
+              });
+            }
           } else if (confirmation.customId === "cancel_submit_event") {
             await confirmation.update({
               content: "Нет, так нет.",
