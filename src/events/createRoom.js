@@ -1,12 +1,11 @@
 const { Events, ChannelType, PermissionsBitField } = require("discord.js");
 const { UserRooms } = require("../dbModels");
-const CREATE_ROOM_CHANNEL_ID = "1281571057798742076"; // @todo: transfer to .env
 module.exports = {
   name: Events.VoiceStateUpdate,
   async execute(oldState, newState) {
     const guild = newState.guild;
 
-    if (newState.channelId === CREATE_ROOM_CHANNEL_ID) {
+    if (newState.channelId === process.env.CREATE_ROOM_CHANNEL_ID) {
       const user = newState.member.user;
 
       const checkActiveRoom = await UserRooms.findOne({
@@ -50,7 +49,10 @@ module.exports = {
       });
     }
 
-    if (oldState.channel && oldState.channelId !== CREATE_ROOM_CHANNEL_ID) {
+    if (
+      oldState.channel &&
+      oldState.channelId !== process.env.CREATE_ROOM_CHANNEL_ID
+    ) {
       if (oldState.channel.members.size === 0) {
         try {
           await UserRooms.destroy({
