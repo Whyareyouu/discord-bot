@@ -24,6 +24,7 @@
     "start": "nodemon --env-file=.env src/index.js",
     "dev": "nodemon --env-file=.env.develop src/index.js",
     "start:deploy": "node --env-file=.env src/deploy-commands.js",
+    "dev:deploy": "node --env-file=.env.develop src/deploy-commands.js",
     "format": "prettier --write \"**/*.{js,ts}\""
   },
   "author": "whyareyou",

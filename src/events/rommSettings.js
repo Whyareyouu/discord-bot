@@ -31,6 +31,9 @@ module.exports = {
       !interaction.isSelectMenu()
     )
       return;
+    const channelId = interaction.channel.id;
+
+    if (channelId !== process.env.SETTINGS_ROOM_CHANNEL_ID) return;
 
     const errorEmbed = new EmbedBuilder()
       .setTitle("Приватные комнаты")
@@ -338,7 +341,6 @@ module.exports = {
       interaction.isSelectMenu() &&
       interaction.customId.startsWith("user_select_")
     ) {
-      console.log("select was userd");
       const targetUserId = interaction.values[0];
       const targetMember = await interaction.guild.members.fetch(targetUserId);
       const action = interaction.customId.replace("user_select_", "");
