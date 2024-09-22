@@ -82,7 +82,10 @@ module.exports = {
                 iconURL: interaction.user.avatarURL(),
               });
 
-              const eventMessage = await channel.send(eventEmbed);
+              const eventMessage = await channel.send({
+                content: "@everyone",
+                ...eventEmbed,
+              });
 
               await Event.create({
                 name: event.title,
