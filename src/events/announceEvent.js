@@ -50,11 +50,11 @@ module.exports = {
           if (confirmation.customId === "submit_announce_event") {
             const modal = new ModalBuilder()
               .setCustomId("event_time_modal")
-              .setTitle("Введите время начала ивента");
+              .setTitle("Введите дату и время начала ивента");
 
             const timeInput = new TextInputBuilder()
               .setCustomId("event_time_input")
-              .setLabel("Время начала ивента (например, 18:00)")
+              .setLabel("Время начала ивента (например, 24.09 18:00)")
               .setStyle(TextInputStyle.Short)
               .setRequired(true);
 

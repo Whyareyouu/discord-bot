@@ -33,13 +33,20 @@ const getEmbedForEvent = (settings) => {
     .setCustomId("start_event")
     .setLabel("Начать")
     .setStyle(ButtonStyle.Primary);
+  const endEvent = new ButtonBuilder()
+    .setCustomId("end_event")
+    .setLabel("Завершить")
+    .setStyle(ButtonStyle.Secondary);
 
   const joinActionRow = new ActionRowBuilder().addComponents(
     join_event,
     leave_event,
   );
 
-  const controlEvent = new ActionRowBuilder().addComponents(startEvent);
+  const controlEvent = new ActionRowBuilder().addComponents(
+    startEvent,
+    endEvent,
+  );
 
   return {
     embeds: [embed],

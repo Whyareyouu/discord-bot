@@ -95,10 +95,14 @@ module.exports = {
       });
       return;
     }
-    if (
-      interaction.customId === "start_event" &&
-      checkPermission(interaction, EVENT_ROLE_IDS)
-    ) {
+    if (interaction.customId === "start_event") {
+      if (!checkPermission(interaction, EVENT_ROLE_IDS)) {
+        await interaction.reply({
+          content: "У вас недостаточно прав для использования этой кнопки.",
+          ephemeral: true,
+        });
+        return;
+      }
       const eventData = await Event.findOne({
         where: { id: event.id },
         raw: true,
@@ -118,6 +122,23 @@ module.exports = {
       await message.edit({
         components: [updatedRow],
       });
+      if (interaction.customId === "end_event") {
+        if (!checkPermission(interaction, EVENT_ROLE_IDS)) {
+          await interaction.reply({
+            content: "У вас недостаточно прав для использования этой кнопки.",
+            ephemeral: true,
+          });
+          return;
+        }
+        const updatedButtons = message.components[0].components.map((button) =>
+          ButtonBuilder.from(button).setDisabled(true),
+        );
+        const updatedRow = new ActionRowBuilder().addComponents(updatedButtons);
+
+        await message.edit({
+          components: [updatedRow],
+        });
+      }
     }
   },
 };
