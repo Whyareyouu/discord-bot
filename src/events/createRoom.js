@@ -53,6 +53,11 @@ module.exports = {
       oldState.channel &&
       oldState.channelId !== process.env.CREATE_ROOM_CHANNEL_ID
     ) {
+      const createRoomChannel = oldState.guild.channels.cache.get(
+        process.env.CREATE_ROOM_CHANNEL_ID,
+      );
+      const createRoomCategoryId = createRoomChannel?.parentId;
+      if (oldState.channel.parentId !== createRoomCategoryId) return;
       if (oldState.channel.members.size === 0) {
         try {
           await UserRooms.destroy({
