@@ -74,6 +74,7 @@ module.exports = {
       return;
     }
     try {
+      // @TODO: transfer this function in helpers
       const transformedOptions = options?.reduce(
         (acc, option) => ({ ...acc, [option.name]: option.value }),
         {},
