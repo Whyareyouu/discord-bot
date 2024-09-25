@@ -22,7 +22,7 @@ module.exports = {
       where: { messageId },
       raw: true,
     });
-    console.log(messageId, event);
+    console.log(message.id, event);
     if (!event) {
       return;
     }
@@ -95,6 +95,31 @@ module.exports = {
       });
       return;
     }
+
+    if (interaction.customId === "show_event_players") {
+      const eventData = await Event.findOne({
+        where: { id: event.id },
+        raw: true,
+      });
+      console.log(eventData);
+      const memberPromises = eventData?.players.map((id) =>
+        interaction.guild.members.fetch(id),
+      );
+      const members = await Promise.all(memberPromises);
+
+      const memberNames = members
+        .map((member) =>
+          member?.nickname ? member?.nickname : member?.user?.globalName,
+        )
+        .join("\n");
+
+      await interaction.reply({
+        content: `Список участников:\n${memberNames}`,
+        ephemeral: true,
+      });
+      return;
+    }
+
     if (interaction.customId === "start_event") {
       if (!checkPermission(interaction, EVENT_ROLE_IDS)) {
         await interaction.reply({

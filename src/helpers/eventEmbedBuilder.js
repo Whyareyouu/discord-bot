@@ -18,29 +18,35 @@ const getEmbedForEvent = (settings) => {
       },
     )
     .setImage(settings?.banner)
-    .setFooter({ text: settings?.username, iconURL: settings?.avatarURL });
+    .setFooter({ text: settings?.username, iconURL: settings?.iconURL });
 
   const join_event = new ButtonBuilder()
     .setCustomId("join")
-    .setLabel("Участвую!")
+    .setLabel("Присоединиться")
     .setStyle(ButtonStyle.Success);
   const leave_event = new ButtonBuilder()
     .setCustomId("leave")
-    .setLabel("Отмена")
+    .setLabel("Отменить участие")
     .setStyle(ButtonStyle.Danger);
+
+  const show_player = new ButtonBuilder()
+    .setCustomId("show_event_players")
+    .setLabel("Показать участников")
+    .setStyle(ButtonStyle.Secondary);
 
   const startEvent = new ButtonBuilder()
     .setCustomId("start_event")
-    .setLabel("Начать")
+    .setLabel("Запустить ивент")
     .setStyle(ButtonStyle.Primary);
   const endEvent = new ButtonBuilder()
     .setCustomId("end_event")
-    .setLabel("Завершить")
+    .setLabel("Завершить ивент")
     .setStyle(ButtonStyle.Secondary);
 
   const joinActionRow = new ActionRowBuilder().addComponents(
     join_event,
     leave_event,
+    show_player,
   );
 
   const controlEvent = new ActionRowBuilder().addComponents(
